@@ -1,0 +1,49 @@
+# Intégration continue : chaque push (sur n'importe quelle branche) et chaque
+# pull request déclenche automatiquement les tests TDD puis les scénarios BDD.
+# Un pipeline rouge = on ne fusionne pas (règle de protection de la branche main).
+name: ci
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:   # bouton « Run workflow » pour relancer à la main
+
+jobs:
+  tests:
+    name: "Tests TDD + scénarios BDD (connexion GitHub)"
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Installer Chromium et ses dépendances système (Playwright)
+        run: >
+          mvn -B -q exec:java -e
+          -Dexec.mainClass=com.microsoft.playwright.CLI
+          -Dexec.args="install --with-deps chromium"
+          -Dexec.classpathScope=test
+
+      - name: Tests unitaires (TDD) puis scénarios Gherkin (BDD)
+        run: mvn -B verify
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+          # Secrets du dépôt (Settings > Secrets and variables > Actions).
+          # Absents : le scénario @compte-reel est ignoré, les autres s'exécutent.
+          GH_LOGIN: ${{ secrets.GH_LOGIN }}
+          GH_PASSWORD: ${{ secrets.GH_PASSWORD }}
+          GH_TOTP_SECRET: ${{ secrets.GH_TOTP_SECRET }}
+
+      - name: Publier les rapports (même en cas d'échec)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rapports-tests
+          path: |
+            target/cucumber-reports/
+            target/surefire-reports/
