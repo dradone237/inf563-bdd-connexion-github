@@ -1,0 +1,14 @@
+# Build Maven
+target/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+
+# Ne jamais versionner d'identifiants
+.env
+*.env
