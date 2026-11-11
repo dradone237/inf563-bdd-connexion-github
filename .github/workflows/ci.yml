@@ -1,6 +1,6 @@
 # Intégration continue : chaque push (sur n'importe quelle branche) et chaque
 # pull request déclenche automatiquement les tests TDD puis les scénarios BDD.
-# Un pipeline rouge = on ne fusionne pas (règle de protection de la branche main).
+# Un pipeline rouge se voit sur le commit, le badge et la pull request : on ne fusionne pas.
 name: ci
 
 on:
@@ -11,12 +11,14 @@ on:
 jobs:
   tests:
     name: "Tests TDD + scénarios BDD (connexion GitHub)"
-    runs-on: ubuntu-latest
+    # Version figée : « ubuntu-latest » change d'Ubuntu sans prévenir (passage à 26.04),
+    # ce qui a cassé l'installation de Chromium. Un pipeline doit être reproductible.
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '21'
@@ -41,7 +43,7 @@ jobs:
 
       - name: Publier les rapports (même en cas d'échec)
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: rapports-tests
           path: |

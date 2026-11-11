@@ -94,7 +94,8 @@ Ce code a été écrit **test d'abord** (voir l'historique des commits : tests r
 [`.github/workflows/ci.yml`](.github/workflows/ci.yml) se déclenche à chaque `push` (toutes branches), à
 chaque *pull request* et à la demande (`workflow_dispatch`) :
 
-1. `actions/checkout`, puis `actions/setup-java` (Temurin 21, cache Maven) ;
+1. sur une machine **Ubuntu 24.04 figée** (et non `ubuntu-latest`, qui a changé d'Ubuntu sans prévenir et cassé
+   l'installation de Chromium) : `actions/checkout`, puis `actions/setup-java` (Temurin 21, cache Maven) ;
 2. installation de Chromium par le CLI Playwright **de la même version** que la bibliothèque Java ;
 3. `mvn -B verify` : tests unitaires puis scénarios Cucumber ;
 4. publication des rapports Cucumber (HTML, avec captures des échecs) et Surefire, même en cas d'échec.
