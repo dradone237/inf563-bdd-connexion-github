@@ -11,8 +11,8 @@ on:
 jobs:
   tests:
     name: "Tests TDD + scénarios BDD (connexion GitHub)"
-    # Version figée : « ubuntu-latest » change d'Ubuntu sans prévenir (passage à 26.04),
-    # ce qui a cassé l'installation de Chromium. Un pipeline doit être reproductible.
+    # Version figée plutôt que « ubuntu-latest », qui change d'Ubuntu sans prévenir :
+    # le pipeline reste reproductible.
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
@@ -24,15 +24,10 @@ jobs:
           java-version: '21'
           cache: maven
 
-      - name: Installer Chromium et ses dépendances système (Playwright)
-        run: >
-          mvn -B -q exec:java -e
-          -Dexec.mainClass=com.microsoft.playwright.CLI
-          -Dexec.args="install --with-deps chromium"
-          -Dexec.classpathScope=test
-
-      - name: Tests unitaires (TDD) puis scénarios Gherkin (BDD)
-        run: mvn -B verify
+      # Pas d'étape « playwright install » : elle restait bloquée 10 minutes sur le
+      # téléchargement. Les scénarios utilisent le Google Chrome préinstallé sur la machine.
+      - name: Tests unitaires (TDD) puis scénarios Gherkin (BDD) dans Google Chrome
+        run: mvn -B verify -Dcanal=chrome
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
           # Secrets du dépôt (Settings > Secrets and variables > Actions).

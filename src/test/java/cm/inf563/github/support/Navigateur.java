@@ -17,7 +17,9 @@ import io.cucumber.java.Scenario;
  * neuf par scénario (cookies et session vides) : les scénarios sont isolés.
  * <p>
  * Options : {@code -Dheadless=false} pour voir le navigateur,
- * {@code -DslowMo=500} pour ralentir chaque action (démonstration).
+ * {@code -DslowMo=500} pour ralentir chaque action (démonstration),
+ * {@code -Dcanal=chrome} pour utiliser le Google Chrome déjà installé plutôt que
+ * le Chromium téléchargé par Playwright (en CI : aucun téléchargement).
  */
 public class Navigateur {
 
@@ -30,9 +32,14 @@ public class Navigateur {
     @BeforeAll
     public static void demarrer() {
         playwright = Playwright.create();
-        chromium = playwright.chromium().launch(new BrowserType.LaunchOptions()
+        BrowserType.LaunchOptions options = new BrowserType.LaunchOptions()
                 .setHeadless(Boolean.parseBoolean(System.getProperty("headless", "true")))
-                .setSlowMo(Double.parseDouble(System.getProperty("slowMo", "0"))));
+                .setSlowMo(Double.parseDouble(System.getProperty("slowMo", "0")));
+        String canal = System.getProperty("canal", "");
+        if (!canal.isBlank()) {
+            options.setChannel(canal);
+        }
+        chromium = playwright.chromium().launch(options);
     }
 
     @AfterAll
