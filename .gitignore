@@ -12,3 +12,6 @@ target/
 # Ne jamais versionner d'identifiants
 .env
 *.env
+
+# Captures d'écran personnelles (préparation de la présentation)
+capture_depot_github/

@@ -34,9 +34,9 @@ Fonctionnalité: Connexion à mon compte GitHub
     Et je ne suis pas connecté
 
     Exemples:
-      | cas                    | identifiant                        | mot de passe    |
-      | compte inexistant      | inf563-compte-inexistant-bdd-2026  | MotDePasse!2026 |
-      | adresse e-mail inconnue | inf563.inconnu@example.invalid     | MotDePasse!2026 |
+      | cas                     | identifiant                       | mot de passe    |
+      | compte inexistant       | inf563-compte-inexistant-bdd-2026 | MotDePasse!2026 |
+      | adresse e-mail inconnue | inf563.inconnu@example.invalid    | MotDePasse!2026 |
 
   Scénario: Le lien « mot de passe oublié » mène à la réinitialisation
     Quand je clique sur le lien "Forgot password?"

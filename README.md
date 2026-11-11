@@ -18,6 +18,8 @@ sorte que **chaque push déclenche les tests**.
 | Tests unitaires écrits en TDD (JUnit 5) | 23 réussis |
 | Intégration continue | GitHub Actions à chaque `push` et `pull request` |
 
+Rapport complet : [`docs/Rapport_Devoir1_BDD_connexion_GitHub.pdf`](docs/Rapport_Devoir1_BDD_connexion_GitHub.pdf).
+
 ## Structure
 
 ```
