@@ -85,7 +85,7 @@ public class PageConnexionGitHub {
             saisirCodeDoubleAuthentification(identifiants, horloge);
         }
     }
-    // Mise à jour du projet - Novembre 2026
+    //hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 
     private void saisirCodeDoubleAuthentification(IdentifiantsGitHub identifiants, Clock horloge) {
         String secret = identifiants.secretTotp().orElseThrow(() -> new IllegalStateException(
